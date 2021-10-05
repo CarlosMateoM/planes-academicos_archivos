@@ -1,0 +1,3 @@
+MEDICINA	anatomia I	243	2	3	
+MEDICINA	anatomia	453	1	2	
+MEDICINA	anatomia I	1412	3	3	

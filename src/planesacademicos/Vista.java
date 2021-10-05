@@ -13,13 +13,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.StringTokenizer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.util.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
@@ -42,10 +45,7 @@ public class Vista extends javax.swing.JFrame {
         tabla();
         archivo = new Archivo();
         setLocationRelativeTo(null);
-        jPanel2.setSize(0, 0);
-        jPanel1.setLocation(30, 0);
-        jPanel1.setBounds(30, 0, 700, 391);
-        
+        this.getContentPane().setBackground(Color.white);
 
     }
 
@@ -69,17 +69,14 @@ public class Vista extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnEliminarRegistro = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         cerrar = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JSeparator();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        buscarTxt = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
         jButton8 = new javax.swing.JButton();
-        jPanel8 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
@@ -94,6 +91,9 @@ public class Vista extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
 
         jButton1.setText("jButton1");
 
@@ -184,21 +184,21 @@ public class Vista extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 150, 35));
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, 150, 35));
 
-        jButton3.setBackground(new java.awt.Color(0, 0, 0));
-        jButton3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("MOSTRAR REGISTRO");
-        jButton3.setBorderPainted(false);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton3.setFocusPainted(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarRegistro.setBackground(new java.awt.Color(0, 0, 0));
+        btnEliminarRegistro.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        btnEliminarRegistro.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminarRegistro.setText("MOSTRAR REGISTRO");
+        btnEliminarRegistro.setBorderPainted(false);
+        btnEliminarRegistro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnEliminarRegistro.setFocusPainted(false);
+        btnEliminarRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnEliminarRegistroActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, -1, 35));
+        jPanel1.add(btnEliminarRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 330, 160, 35));
 
         jButton5.setBackground(new java.awt.Color(0, 0, 0));
         jButton5.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -230,11 +230,6 @@ public class Vista extends javax.swing.JFrame {
         });
         jPanel1.add(cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, 10, 10));
 
-        jSeparator3.setBackground(new java.awt.Color(0, 0, 0));
-        jSeparator3.setForeground(new java.awt.Color(0, 0, 0));
-        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel1.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 20, 450));
-
         jButton6.setBackground(new java.awt.Color(255, 255, 255));
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/down-arrow.png"))); // NOI18N
         jButton6.setBorder(null);
@@ -255,77 +250,78 @@ public class Vista extends javax.swing.JFrame {
         jButton7.setBorderPainted(false);
         jButton7.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton7.setFocusPainted(false);
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, -1, 25));
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField1.setText("Buscar");
-        jTextField1.setToolTipText("");
-        jTextField1.setBorder(null);
-        jTextField1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 33, 250, 20));
+        buscarTxt.setBackground(new java.awt.Color(255, 255, 255));
+        buscarTxt.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        buscarTxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        buscarTxt.setText("Buscar");
+        buscarTxt.setToolTipText("");
+        buscarTxt.setBorder(null);
+        buscarTxt.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        buscarTxt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buscarTxtMouseClicked(evt);
+            }
+        });
+        jPanel1.add(buscarTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 33, 250, 20));
 
         jSeparator4.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator4.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 320, 10));
 
-        jButton8.setBackground(new java.awt.Color(255, 255, 255));
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/equalization.png"))); // NOI18N
-        jButton8.setBorder(null);
+        jButton8.setBackground(new java.awt.Color(0, 0, 0));
+        jButton8.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(255, 255, 255));
+        jButton8.setText("ELIMINAR REGISTRO");
         jButton8.setBorderPainted(false);
         jButton8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton8.setFocusPainted(false);
-        jPanel1.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 32, -1, -1));
-
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 700, 390));
-
-        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/left-arrow-line-symbol.png"))); // NOI18N
-        jLabel8.setText("jLabel8");
-        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jLabel8MousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jLabel8MouseReleased(evt);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
             }
         });
-        jPanel8.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 20, 70));
-        jLabel8.getAccessibleContext().setAccessibleParent(null);
+        jPanel1.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, 35));
 
-        getContentPane().add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 30, 380));
-        jPanel8.getAccessibleContext().setAccessibleParent(null);
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 700, 385));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setPreferredSize(new java.awt.Dimension(0, 325));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel2.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 260, 10));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(51, 51, 51));
         jLabel2.setText("PROGRAMA");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 85, -1, 20));
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
         jLabel3.setText("ASIGNATURA");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 165, -1, 20));
 
         asignaturaTxt.setBackground(new java.awt.Color(255, 255, 255));
         asignaturaTxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         asignaturaTxt.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                asignaturaTxtKeyPressed(evt);
-            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 asignaturaTxtKeyTyped(evt);
             }
         });
+        jPanel2.add(asignaturaTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 165, 130, 20));
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(51, 51, 51));
         jLabel4.setText("CÓDIGO");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 245, -1, 20));
 
         codigoTxt.setBackground(new java.awt.Color(255, 255, 255));
         codigoTxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
@@ -334,10 +330,12 @@ public class Vista extends javax.swing.JFrame {
                 codigoTxtKeyTyped(evt);
             }
         });
+        jPanel2.add(codigoTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 245, 130, 20));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(51, 51, 51));
         jLabel5.setText("SEMESTRE");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 205, -1, 20));
 
         semestreTxt.setBackground(new java.awt.Color(255, 255, 255));
         semestreTxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
@@ -346,10 +344,12 @@ public class Vista extends javax.swing.JFrame {
                 semestreTxtKeyTyped(evt);
             }
         });
+        jPanel2.add(semestreTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 205, 130, 20));
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(51, 51, 51));
         jLabel6.setText("CREDITOS");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 125, -1, 20));
 
         creditoTxt.setBackground(new java.awt.Color(255, 255, 255));
         creditoTxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
@@ -358,10 +358,12 @@ public class Vista extends javax.swing.JFrame {
                 creditoTxtKeyTyped(evt);
             }
         });
+        jPanel2.add(creditoTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 125, 130, 20));
 
         jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
         jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ELEGIR PROGRAMA", "MEDICINA", "ADMINISTRACIÓN", "INGENIERÍA DE SISTEMAS", "INGENIERÍA INDUSTRIAL", "DERECHO" }));
+        jPanel2.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 85, 140, -1));
 
         jButton2.setBackground(new java.awt.Color(0, 0, 0));
         jButton2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -375,99 +377,39 @@ public class Vista extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 100, 35));
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("REGISTRO DE ASIGNATURAS");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 35, 250, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(170, 170, 170)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel2)
-                                .addGap(20, 20, 20)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel6)
-                                .addGap(36, 36, 36)
-                                .addComponent(creditoTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel3)
-                                .addGap(21, 21, 21)
-                                .addComponent(asignaturaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel5)
-                                .addGap(33, 33, 33)
-                                .addComponent(semestreTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel4)
-                                .addGap(49, 49, 49)
-                                .addComponent(codigoTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(creditoTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(asignaturaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(semestreTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(codigoTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
-        );
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-300, 0, 300, 380));
 
-        jComboBox1.getAccessibleContext().setAccessibleParent(null);
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-300, 0, 300, 390));
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/left-arrow-line-symbol.png"))); // NOI18N
+        jLabel8.setText("jLabel8");
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
+        jPanel8.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 20, 70));
+
+        jSeparator3.setBackground(new java.awt.Color(0, 0, 0));
+        jSeparator3.setForeground(new java.awt.Color(0, 0, 0));
+        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jPanel8.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 0, 10, 380));
+
+        getContentPane().add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 30, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void tabla() {
 
-        
-        
         JTableHeader th = jTable1.getTableHeader();
 
         Border border = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
@@ -479,12 +421,6 @@ public class Vista extends javax.swing.JFrame {
         String header[] = {"NÚMERO", "PROGRAMA", "ASIGNATURA", "CÓDIGO", "SEMESTRE", "CREDITOS"};
         tabla = new DefaultTableModel(null, header);
 
-//        tabla.addColumn("NÚMERO");
-//        tabla.addColumn("PROGRAMA");
-//        tabla.addColumn("ASIGNATURA");
-//        tabla.addColumn("CODIGO");
-//        tabla.addColumn("SEMESTRE");
-//        tabla.addColumn("CREDITOS");
         jTable1.setModel(tabla);
 
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
@@ -564,66 +500,96 @@ public class Vista extends javax.swing.JFrame {
             throws FileNotFoundException, IOException {
 
         boolean valido = true;
+        boolean result = false;
         String linea = null;
         int total = 0;
         int n = 1;
 
-        File Archivo = new File(archivo.getNOMBRE_ARCHIVO());
-        BufferedReader leer = new BufferedReader(new FileReader(Archivo));
 
         if (opcion != 2) {
             tabla.setRowCount(0);
         }
 
-        while ((linea = leer.readLine()) != null) {
+        if (!archivo.isFileEmpty()) {
+            
+            File Archivo = new File(archivo.getNOMBRE_ARCHIVO());
+            BufferedReader leer = new BufferedReader(new FileReader(Archivo));
+            
+            while ((linea = leer.readLine()) != null) {
 
-            StringTokenizer campo = new StringTokenizer(linea, "\t");
+                StringTokenizer campo = new StringTokenizer(linea, "\t");
 
-            String Pro = campo.nextToken().trim();
-            String Asig = campo.nextToken().trim();
-            String Cod = campo.nextToken().trim();
-            String Sem = campo.nextToken().trim();
-            String Cre = campo.nextToken().trim();
+                String Pro = campo.nextToken().trim();
+                String Asig = campo.nextToken().trim();
+                String Cod = campo.nextToken().trim();
+                String Sem = campo.nextToken().trim();
+                String Cre = campo.nextToken().trim();
 
-            String rowData[] = {String.valueOf(n), Pro, Asig, Cod, Sem, Cre};
+                String rowData[] = {String.valueOf(n), Pro, Asig, Cod, Sem, Cre};
 
-            if (opcion == 0) {
-                tabla.addRow(rowData);
-                n++;
-
-            } else if (opcion == 1) {
-
-                if (Pro.equals(programa)) {
-
+                if (opcion == 0) {
                     tabla.addRow(rowData);
-                    if (creditosAsignaturas == 1) {
-                        total++;
-                    } else if (creditosAsignaturas == 2) {
-                        total += Integer.parseInt(Cre);
-                    }
-
                     n++;
-                }
-            } else if (opcion == 2) {
 
-                if (validar == 1) {
-                    if (asignaturaTxt.getText().equalsIgnoreCase(Asig) && Pro.equals(programa)) {
-                        valido = false;
-                        break;
+                } else if (opcion == 1) {
+
+                    if (Pro.equals(programa)) {
+
+                        tabla.addRow(rowData);
+
+                        if (creditosAsignaturas == 1) {
+                            total++;
+                        } else if (creditosAsignaturas == 2) {
+                            total += Integer.parseInt(Cre);
+                        }
+
+                        n++;
                     }
-                } else if (validar == 2) {
-                    if (codigoTxt.getText().equalsIgnoreCase(Cod)) {
-                        valido = false;
-                        break;
+                } else if (opcion == 2) {
+
+                    if (validar == 1) {
+                        if (asignaturaTxt.getText().equalsIgnoreCase(Asig) && Pro.equals(programa)) {
+                            valido = false;
+                            break;
+                        }
+                    } else if (validar == 2) {
+                        if (codigoTxt.getText().equalsIgnoreCase(Cod)) {
+                            valido = false;
+                            break;
+                        }
+                    }
+                } else if (opcion == 3) {
+
+                    String termino = buscarTxt.getText();
+                    if (!termino.isEmpty()) {
+                        if (isEqualsString(termino, Pro)
+                                || isEqualsString(termino, Asig)
+                                || isEqualsString(termino, Cod)) {
+                            tabla.addRow(rowData);
+                            result = true;
+                            n++;
+                        }
                     }
                 }
             }
-        }
 
         leer.close();
+        }
+        if (!result && opcion == 3) {
+            mensaje("no hay resultados para la búsqueda!");
+        }
+
 
         mensajeListar(programa, creditosAsignaturas, validar, valido, total);
         return valido;
+    }
+
+    public boolean isEqualsString(String string1, String string2) {
+        String string[] = {string1, string2};
+        for (int i = 0; i < 2; i++) {
+            string[i] = Normalizer.normalize(string[i].trim(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+        }
+        return string[0].equalsIgnoreCase(string[1]);
     }
 
     private void ejecutarOpcionAsignatura(int opcion) {
@@ -671,43 +637,44 @@ public class Vista extends javax.swing.JFrame {
         String semestre = semestreTxt.getText();
         String creditos = creditoTxt.getText();
 
-        try {
-            if (!validarCampos()) {
-                if (listar(programa, 2, 0, 1)) {
-                    if (listar(null, 2, 0, 2)) {
-                        if (Integer.parseInt(semestre) > 0 && Integer.parseInt(semestre) < 11) {
+        
+            try {
+                if (!validarCampos()) {
+                    if (listar(programa, 2, 0, 1)) {
+                        if (listar(null, 2, 0, 2)) {
+                            if (Integer.parseInt(semestre) > 0 && Integer.parseInt(semestre) < 11) {
 
-                            datos.setAsignature(asignatura);
-                            datos.setPrograma(programa);
-                            datos.setCodigo(codigo);
-                            datos.setSemestre(semestre);
-                            datos.setCreditos(creditos);
-                            archivo.GuardarDatos(datos);
-                            limpiarCampos();
-                        } else {
-                            mensaje("Supera el maximo semestre posible!!");
+                                datos.setAsignature(asignatura);
+                                datos.setPrograma(programa);
+                                datos.setCodigo(codigo);
+                                datos.setSemestre(semestre);
+                                datos.setCreditos(creditos);
+                                archivo.GuardarDatos(datos);
+                                limpiarCampos();
+                            } else {
+                                mensaje("Supera el maximo semestre posible!!");
+                            }
                         }
                     }
+                } else {
+                    mensaje("Por favor, llene todos los campos\nantes de registrar!!");
                 }
-            } else {
-                mensaje("Por favor, llene todos los campos\nantes de registrar!!");
+
+            } catch (IOException ex) {
+                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        } catch (IOException ex) {
-            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnEliminarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarRegistroActionPerformed
 
         try {
             listar(null, 0, 0, 0);
         } catch (IOException ex) {
             Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnEliminarRegistroActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
@@ -720,10 +687,6 @@ public class Vista extends javax.swing.JFrame {
         ejecutarOpcionAsignatura(2);
 
     }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void asignaturaTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_asignaturaTxtKeyPressed
-
-    }//GEN-LAST:event_asignaturaTxtKeyPressed
 
     private void asignaturaTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_asignaturaTxtKeyTyped
         // TODO add your handling code here:
@@ -771,38 +734,112 @@ public class Vista extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jPanel1MouseDragged
 
-    
-    int HEIGHTF = 391;
+//     ANIMACIONES
+    int HEIGHTF = 380;
     boolean isMenu = true;
-    
-      
-    
-    private void jLabel8MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MousePressed
+
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         // TODO add your handling code here:
-        if(isMenu){
+        if (isMenu) {
             isMenu = false;
-            this.setSize(1030, HEIGHTF);
-        }else{
+            setImage(true);
+            animacion(jPanel2, 2, 30, true, this);
+            animacion(jPanel1, 2, 330, true, this);
+        } else {
             isMenu = true;
+            setImage(false);
+            animacion(jPanel1, 3, 330, false, this);
             this.setSize(730, HEIGHTF);
-   
         }
-    }//GEN-LAST:event_jLabel8MousePressed
+    }//GEN-LAST:event_jLabel8MouseClicked
 
-    private void jLabel8MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseReleased
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        try {
+            // TODO add your handling code here:
+            listar(null, 3, 0, 0);
+        } catch (IOException ex) {
+            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void buscarTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscarTxtMouseClicked
         // TODO add your handling code here:
-        if(isMenu){
-            jPanel1.setLocation(30, 0);
-//            jPanel2.setSize(0, HEIGHTF);
-                jPanel2.setLocation(-300,0);
-        }else{
-            jPanel1.setLocation(330, 0);
-//            jPanel2.setSize(300, HEIGHTF);
-                jPanel2.setLocation(30,0);
+        buscarTxt.setText("");
+    }//GEN-LAST:event_buscarTxtMouseClicked
 
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here
+        int delete = JOptionPane.showConfirmDialog(null, "¿desea eliminar el registro!?");
+        if (delete == 0) {
+            archivo.eliminar();
+        } else {
+            mensaje("¡Operación cancelada!");
         }
-    }//GEN-LAST:event_jLabel8MouseReleased
-   
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void setImage(boolean mayorQue) {
+        if (mayorQue) {
+            jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/right-arrow-angle.png")));
+        } else {
+            jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/left-arrow-line-symbol.png")));
+        }
+    }
+
+    private void animacion(javax.swing.JPanel panel, int sumarRestar, int posicionX, boolean mayorQue, javax.swing.JFrame temJFrame) {
+
+        TimerTask task = new TimerTask() {
+            javax.swing.JFrame jFrame = temJFrame;
+
+            @Override
+            public void run() {
+
+                int tWidth = jFrame.getWidth();
+                int tPosicionX = panel.getX();
+
+                if (mayorQue) {
+
+                    if (tWidth < 1030) {
+                        tWidth += 10;
+                    }
+                    if (tPosicionX < posicionX) {
+                        tPosicionX = panel.getX() + sumarRestar;
+                    }
+
+                } else {
+                    if (tWidth > 710) {
+                        tWidth -= 10;
+                    }
+                    if (tPosicionX > posicionX) {
+                        tPosicionX = panel.getX() - sumarRestar;
+                    }
+
+                }
+
+                jFrame.setSize(tWidth, HEIGHTF);
+                panel.setLocation(tPosicionX, 0);
+                jFrame.setLocationRelativeTo(null);
+
+                if (mayorQue) {
+                    if ((tPosicionX >= posicionX) && (tWidth >= 1030)) {
+                        cancel();
+                    }
+                } else {
+
+                    if ((tPosicionX <= posicionX) && (tWidth <= 735)) {
+                        cancel();
+                    }
+                }
+
+            }
+
+        };
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(task, 0, 1);
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -820,13 +857,17 @@ public class Vista extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Vista.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Vista.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Vista.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Vista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Vista.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -840,12 +881,13 @@ public class Vista extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField asignaturaTxt;
+    private javax.swing.JButton btnEliminarRegistro;
+    private javax.swing.JTextField buscarTxt;
     private javax.swing.JButton cerrar;
     private javax.swing.JTextField codigoTxt;
     private javax.swing.JTextField creditoTxt;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -873,7 +915,6 @@ public class Vista extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField semestreTxt;
     // End of variables declaration//GEN-END:variables
 }
